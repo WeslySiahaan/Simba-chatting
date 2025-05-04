@@ -1,0 +1,124 @@
+.chat-app {
+  padding: 20px;
+  background-color: #000000;
+  color: white;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.header {
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header h1 {
+  font-size: 24px;
+  margin: 0;
+}
+
+.back-button {
+  padding: 5px 10px;
+  background-color: #4a90e2;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.back-button:hover {
+  background-color: #357abd;
+}
+
+.post-preview {
+  margin-bottom: 20px;
+}
+
+.post-title {
+  font-size: 20px;
+  margin-bottom: 10px;
+  color: white;
+}
+
+.post-image {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.post-description {
+  font-size: 16px;
+  color: #aaaaaa;
+  margin: 0 0 10px 0;
+}
+
+.like-button {
+  padding: 5px 10px;
+  background-color: #4a90e2;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  margin-top: 5px;
+}
+
+.like-button:hover {
+  background-color: #357abd;
+}
+
+.messages {
+  margin-bottom: 20px;
+  max-height: 50vh;
+  overflow-y: auto;
+}
+
+.message {
+  padding: 10px;
+  border-bottom: 1px solid #333333;
+}
+
+.user {
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.new-message-form {
+  display: flex;
+  gap: 10px;
+}
+
+.new-message-input {
+  flex: 1;
+  padding: 10px;
+  background-color: #333333;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-size: 16px;
+}
+
+.new-message-input::placeholder {
+  color: #aaaaaa;
+}
+
+.send-button {
+  padding: 10px 20px;
+  background-color: #4a90e2;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+}
+
+.send-button:hover {
+  background-color: #357abd;
+}
+
+.error {
+  color: red;
+  font-size: 14px;
+}
