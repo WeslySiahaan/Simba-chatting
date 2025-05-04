@@ -97,63 +97,13 @@ export const ChatList = ({ posts, setPosts }) => {
               className="post-image"
               onError={(e) => console.error("Error loading image:", post.image_data)}
             />
-            <div className="post-overlay" style={{ display: "none" }}>
+            <div className="post-overlay">
               <h3>{post.title}</h3>
-              <p>Likes: {post.like_count}</p>
+              <p className="like-count">Likes: {post.like_count}</p>
               <button onClick={(e) => { e.stopPropagation(); handleLike(post.id); }} className="like-button">
                 Like
               </button>
             </div>
-            <style jsx>{`
-              .post-card {
-                position: relative;
-                width: 200px;
-                margin: 0 auto;
-                cursor: pointer;
-              }
-              .post-card:hover .post-overlay {
-                display: block;
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background: rgba(0, 0, 0, 0.7);
-                color: white;
-                padding: 10px;
-                border-radius: 5px;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-              }
-              .post-image {
-                width: 100%;
-                height: auto;
-                border-radius: 5px;
-              }
-              .post-overlay h3 {
-                margin: 0;
-                font-size: 16px;
-                text-align: center;
-              }
-              .post-overlay p {
-                margin: 5px 0 0;
-                font-size: 14px;
-              }
-              .like-button {
-                padding: 5px 10px;
-                background-color: #4a90e2;
-                border: none;
-                border-radius: 5px;
-                color: white;
-                cursor: pointer;
-                margin-top: 5px;
-              }
-              .like-button:hover {
-                background-color: #357abd;
-              }
-            `}</style>
           </div>
         ))}
       </div>

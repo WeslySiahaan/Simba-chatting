@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/base64"
 	"fmt"
+	"log"
 	"net/http"
 	"time"
 
@@ -31,7 +32,7 @@ func createPostHandler(c *gin.Context, ctx context.Context, client *firestore.Cl
 
 	// Save post to Firestore
 	postID := fmt.Sprintf("post_%d", time.Now().UnixNano())
-	fmt.Println("Creating post with ID:", postID) // Debug log
+	log.Printf("Creating post with ID: %s for user: %s", postID, userID) // Enhanced debug log
 	post := Post{
 		ID:          postID,
 		UserID:      userID,
@@ -44,9 +45,11 @@ func createPostHandler(c *gin.Context, ctx context.Context, client *firestore.Cl
 	}
 	_, err := client.Collection("posts").Doc(postID).Set(ctx, post)
 	if err != nil {
+		log.Printf("Failed to save post %s to Firestore: %v", postID, err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save post: " + err.Error()})
 		return
 	}
+	log.Printf("Successfully saved post with ID: %s", postID) // Enhanced debug log
 
 	c.JSON(http.StatusCreated, post)
 }
@@ -61,23 +64,26 @@ func listPostsHandler(c *gin.Context, ctx context.Context, client *firestore.Cli
 		}
 		var post Post
 		if err := doc.DataTo(&post); err != nil {
+			log.Printf("Failed to parse post from document: %v", err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to parse post"})
 			return
 		}
 		posts = append(posts, post)
 	}
+	log.Printf("Retrieved %d posts", len(posts)) // Debug log
 	c.JSON(http.StatusOK, posts)
 }
 
 func getPostHandler(c *gin.Context, ctx context.Context, client *firestore.Client) {
 	id := c.Param("id")
 
-	// Set a timeout for Firestore request
-	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	// Set a timeout for Firestore request (increased to 10 seconds for debugging)
+	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
 	defer cancel()
 
 	doc, err := client.Collection("posts").Doc(id).Get(ctx)
 	if err != nil {
+		log.Printf("Failed to get post %s: %v", id, err)
 		c.JSON(http.StatusNotFound, gin.H{"error": "Post not found: " + err.Error()})
 		return
 	}
@@ -86,6 +92,7 @@ func getPostHandler(c *gin.Context, ctx context.Context, client *firestore.Clien
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to parse post: " + err.Error()})
 		return
 	}
+	log.Printf("Successfully retrieved post %s", id) // Debug log
 	c.JSON(http.StatusOK, post)
 }
 
@@ -93,21 +100,22 @@ func likePostHandler(c *gin.Context, ctx context.Context, client *firestore.Clie
 	id := c.Param("id")
 	userID := c.GetString("user_id")
 
-	fmt.Println("Like request for post:", id, "by user:", userID) // Debug log
+	log.Printf("Like request for post: %s by user: %s", id, userID) // Debug log
 
 	if userID == "" {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "User not authenticated"})
 		return
 	}
 
-	// Set a timeout for Firestore request
-	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	// Set a timeout for Firestore request (increased to 10 seconds for debugging)
+	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
 	defer cancel()
 
 	// Get the post
 	docRef := client.Collection("posts").Doc(id)
 	doc, err := docRef.Get(ctx)
 	if err != nil {
+		log.Printf("Failed to get post %s for like: %v", id, err)
 		c.JSON(http.StatusNotFound, gin.H{"error": "Post not found: " + err.Error()})
 		return
 	}
@@ -132,9 +140,24 @@ func likePostHandler(c *gin.Context, ctx context.Context, client *firestore.Clie
 		{Path: "likedBy", Value: firestore.ArrayUnion(userID)},
 	})
 	if err != nil {
+		log.Printf("Failed to update like for post %s: %v", id, err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to like post: " + err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "Post liked"})
+	// Fetch updated post
+	updatedDoc, err := docRef.Get(ctx)
+	if err != nil {
+		log.Printf("Failed to get updated post %s: %v", id, err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch updated post: " + err.Error()})
+		return
+	}
+	var updatedPost Post
+	if err := updatedDoc.DataTo(&updatedPost); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to parse updated post: " + err.Error()})
+		return
+	}
+
+	log.Printf("Successfully liked post %s by user %s", id, userID) // Debug log
+	c.JSON(http.StatusOK, updatedPost) // Return updated post
 }

@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"log"
+	"os"
 
 	firebase "firebase.google.com/go"
 	"github.com/gin-contrib/cors"
@@ -22,40 +23,55 @@ type Post struct {
 }
 
 func main() {
-	// Initialize Firebase
-	ctx := context.Background()
-	sa := option.WithCredentialsFile("service-account.json")
-	app, err := firebase.NewApp(ctx, nil, sa)
+	// Get the credentials file path from an environment variable
+	credentialsPath := os.Getenv("GOOGLE_APPLICATION_CREDENTIALS")
+	if credentialsPath == "" {
+		log.Fatalf("GOOGLE_APPLICATION_CREDENTIALS environment variable not set")
+	}
+
+	// Verify the credentials file exists
+	if _, err := os.Stat(credentialsPath); os.IsNotExist(err) {
+		log.Fatalf("Credentials file does not exist at path: %s", credentialsPath)
+	}
+
+	// Read the service account file to extract project ID
+	data, err := os.ReadFile(credentialsPath)
+	if err != nil {
+		log.Fatalf("Failed to read credentials file: %v", err)
+	}
+
+	// Initialize Firebase with the service account and project configuration
+	config := &firebase.Config{ProjectID: ""}
+	app, err := firebase.NewApp(context.Background(), config, option.WithCredentialsJSON(data))
 	if err != nil {
 		log.Fatalf("Failed to initialize Firebase: %v", err)
 	}
 
 	// Initialize Firestore
-	client, err := app.Firestore(ctx)
+	client, err := app.Firestore(context.Background())
 	if err != nil {
 		log.Fatalf("Failed to initialize Firestore: %v", err)
 	}
 	defer client.Close()
 
 	// Initialize Firebase Auth client
-	authClient, err := app.Auth(ctx)
+	authClient, err := app.Auth(context.Background())
 	if err != nil {
 		log.Fatalf("Failed to initialize Firebase Auth client: %v", err)
 	}
 
 	// Explicitly use the auth package to avoid unused import error
-	// This is a temporary debug step to confirm usage
 	_ = authClient
 
 	// Initialize Gin router
 	r := gin.Default()
 
 	// Configure CORS
-	config := cors.DefaultConfig()
-	config.AllowOrigins = []string{"http://localhost:3000"}
-	config.AllowMethods = []string{"GET", "POST", "OPTIONS"}
-	config.AllowHeaders = []string{"Authorization", "Content-Type"}
-	r.Use(cors.New(config))
+	configCors := cors.DefaultConfig()
+	configCors.AllowOrigins = []string{"http://localhost:3000"}
+	configCors.AllowMethods = []string{"GET", "POST", "OPTIONS"}
+	configCors.AllowHeaders = []string{"Authorization", "Content-Type"}
+	r.Use(cors.New(configCors))
 
 	// Authentication middleware
 	r.Use(func(c *gin.Context) {
@@ -83,7 +99,7 @@ func main() {
 		log.Printf("Extracted token: %s", token)
 
 		// Verify the token using Firebase Auth
-		decodedToken, err := authClient.VerifyIDToken(ctx, token)
+		decodedToken, err := authClient.VerifyIDToken(context.Background(), token)
 		if err != nil {
 			log.Printf("Token verification failed: %v", err)
 			c.JSON(401, gin.H{"error": "Invalid token: " + err.Error()})
@@ -100,16 +116,16 @@ func main() {
 
 	// Setup routes
 	r.POST("/posts", func(c *gin.Context) {
-		createPostHandler(c, ctx, client, nil)
+		createPostHandler(c, context.Background(), client, nil)
 	})
 	r.GET("/posts", func(c *gin.Context) {
-		listPostsHandler(c, ctx, client)
+		listPostsHandler(c, context.Background(), client)
 	})
 	r.GET("/posts/:id", func(c *gin.Context) {
-		getPostHandler(c, ctx, client)
+		getPostHandler(c, context.Background(), client)
 	})
 	r.POST("/posts/:id/like", func(c *gin.Context) {
-		likePostHandler(c, ctx, client)
+		likePostHandler(c, context.Background(), client)
 	})
 
 	// Start server

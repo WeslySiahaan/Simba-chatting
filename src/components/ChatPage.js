@@ -45,6 +45,7 @@ const ChatPage = () => {
           throw new Error(`Failed to fetch post: ${response.statusText}`);
         }
         const data = await response.json();
+        console.log("Initial post data:", data); // Debug initial data
         setPost(data);
         setError(null);
       } catch (err) {
@@ -118,10 +119,9 @@ const ChatPage = () => {
         if (!response.ok) {
           throw new Error(`Failed to like post: ${response.statusText}`);
         }
-        // Refresh post data
-        const newResponse = await fetch(`http://localhost:8080/posts/${postId}`);
-        const newData = await newResponse.json();
-        setPost(newData);
+        const updatedPost = await response.json();
+        console.log("Updated post data:", updatedPost); // Debug updated data
+        setPost(updatedPost); // Update state with the updated post
         return;
       } catch (err) {
         if (attempt === maxRetries - 1) {
@@ -159,7 +159,7 @@ const ChatPage = () => {
           />
           <p className="post-description">{post.description}</p>
           <button onClick={handleLike} className="like-button">
-            Like ({post.like_count})
+            Like ({post ? post.like_count : 0})
           </button>
         </div>
       )}
