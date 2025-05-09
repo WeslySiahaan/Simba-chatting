@@ -19,6 +19,17 @@ export const Auth = ({ setIsAuth }) => {
 
   return (
     <div className="auth">
+      <h1>SELAMAT DATANG DI SIMBA CHATTING</h1>
+      <img
+        src="/logo.jpg" // Ganti dengan path gambar Anda
+        alt="App Logo"
+        style={{
+          width: "400px", // Ukuran lebar gambar
+          height: "400px", // Ukuran tinggi gambar
+          display: "block",
+          margin: "0 auto 20px auto", // Memusatkan gambar dengan margin bawah
+        }}
+      />
       <p>Sign in with Google to continue</p>
       <button onClick={signInWithGoogle}>
         Sign In With Google
