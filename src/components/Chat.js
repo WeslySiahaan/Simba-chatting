@@ -20,23 +20,27 @@ const Chat = ({ postId }) => {
     if (!postId) return;
 
     const queryMessages = query(messagesRef, orderBy("createdAt"));
-    const unsubscribe = onSnapshot(queryMessages, (snapshot) => {
-      let messages = [];
-      snapshot.forEach((doc) => {
-        messages.push({ ...doc.data(), id: doc.id });
-      });
-      setMessages(messages);
-    }, (error) => {
-      console.error('Error fetching comments:', error);
-    });
+    const unsubscribe = onSnapshot(
+      queryMessages,
+      (snapshot) => {
+        const msgs = snapshot.docs.map((doc) => ({
+          ...doc.data(),
+          id: doc.id,
+        }));
+        setMessages(msgs);
+      },
+      (error) => {
+        console.error("Error fetching comments:", error);
+      }
+    );
 
     return () => unsubscribe();
-  }, [postId, messagesRef]); // Added messagesRef to dependency array
+  }, [postId]);
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-    if (newMessage === "" || !postId || !auth.currentUser) return;
+    if (!newMessage.trim() || !auth.currentUser) return;
 
     try {
       await addDoc(messagesRef, {
@@ -47,8 +51,8 @@ const Chat = ({ postId }) => {
         postId,
       });
       setNewMessage("");
-    } catch (error) {
-      console.error('Error adding comment:', error);
+    } catch (err) {
+      console.error("Error adding comment:", err);
     }
   };
 
@@ -57,18 +61,27 @@ const Chat = ({ postId }) => {
       <div className="header">
         <h1>Comments for Post</h1>
       </div>
+
       <div className="messages">
+        {messages.length === 0 && (
+          <div className="message">
+            <span className="user">System:</span> No comments yet. Be the first!
+          </div>
+        )}
+
         {messages.map((message) => (
           <div key={message.id} className="message">
-            <span className="user">{message.user}:</span> {message.text}
+            <span className="user">{message.user}:</span>
+            <span>{message.text}</span>
           </div>
         ))}
       </div>
+
       <form onSubmit={handleSubmit} className="new-message-form">
         <input
           type="text"
           value={newMessage}
-          onChange={(event) => setNewMessage(event.target.value)}
+          onChange={(e) => setNewMessage(e.target.value)}
           className="new-message-input"
           placeholder="Type your comment here..."
         />

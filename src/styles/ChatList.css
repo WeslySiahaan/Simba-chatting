@@ -1,114 +1,285 @@
+/* ChatList container */
 .chat-list {
-  background-color: #000000;
-  color: white;
   padding: 20px;
-  height: 100vh; /* Full screen height */
+  background: linear-gradient(to bottom, #4a90e2, #ffffff); /* Gradiasi biru ke putih */
+  color: #000000; /* Mengubah dari #ffffff untuk keterbacaan */
+  min-height: 100vh;
+  overflow-y: auto;
+  font-family: 'Roboto', sans-serif; /* Konsistensi font */
+  display: flex;
+  flex-direction: column;
 }
 
+/* Header */
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
-.header h1 {
-  font-size: 24px;
+.h1 {
+  font-size: calc(1.25rem + 1vw); /* Scalable font size */
+  font-weight: 600;
   margin: 0;
+  color: #940808; /* Dipertahankan, bisa diubah jika perlu */
+  font-family: 'Roboto', sans-serif; /* Konsistensi font */
 }
 
 .menu-icon {
-  font-size: 24px;
+  font-size: 1.5rem;
   cursor: pointer;
+  color: #4a90e2;
+  transition: color 0.3s ease;
 }
 
+.menu-icon:hover,
+.menu-icon:focus {
+  color: #357abd;
+}
+
+.menu-icon:focus {
+  outline: 2px solid #4a90e2;
+  outline-offset: 2px;
+}
+
+/* Search Bar */
 .search-bar {
-  width: 100%;
-  padding: 10px;
+  width: 40%;
+  padding: 12px;
   margin-bottom: 20px;
-  background-color: #333333;
-  border: none;
-  border-radius: 5px;
-  color: white;
-  font-size: 16px;
+  background-color: #ffffff;
+  border: 1px solid #444444;
+  border-radius: 6px;
+  color: #000000;
+  font-size: 1rem;
+  font-family: 'Roboto', sans-serif; /* Konsistensi font */
+  transition: border-color 0.3s ease;
 }
 
 .search-bar::placeholder {
-  color: #aaaaaa;
+  color: #bbbbbb;
 }
 
+.search-bar:focus {
+  border-color: #4a90e2;
+  outline: none;
+}
+
+/* Posts Grid */
 .posts-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
   overflow-y: auto;
-  max-height: 70vh; /* Limit height to allow scrolling */
+  max-height: 70vh;
+  padding: 10px;
 }
 
 .post-card {
   position: relative;
-  width: 200px;
+  width: 100%;
+  max-width: 450px;
   margin: 0 auto;
   cursor: pointer;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.post-card:hover,
+.post-card:focus-within {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
 }
 
 .post-image {
   width: 100%;
-  height: auto;
-  border-radius: 5px;
+  height: 300px;
+  border-radius: 16px 16px 0 0;
+  object-fit: cover;
 }
 
 .post-overlay {
-  display: none; /* Hidden by default */
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.7);
-  color: white;
-  padding: 10px;
-  border-radius: 5px;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.9));
+  color: #ffffff;
+  padding: 20px;
+  border-radius: 16px;
+  display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
-.post-card:hover .post-overlay {
-  display: flex; /* Show on hover */
+.post-card:hover .post-overlay,
+.post-card:focus-within .post-overlay {
+  opacity: 1;
 }
 
 .post-overlay h3 {
   margin: 0;
-  font-size: 16px;
+  font-size: 1.5rem;
+  font-weight: 600;
   text-align: center;
+  text-transform: capitalize;
+  font-family: 'Roboto', sans-serif; /* Konsistensi font */
 }
 
 .post-overlay .like-count {
-  margin: 5px 0 0;
-  font-size: 14px;
+  font-size: 1rem;
   position: absolute;
-  bottom: 10px;
-  right: 10px;
-  background: none; /* Remove background since overlay already has it */
-  padding: 0; /* Remove padding */
+  bottom: 16px;
+  right: 16px;
+  padding: 6px 10px;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 6px;
+  font-family: 'Roboto', sans-serif; /* Konsistensi font */
 }
 
 .like-button {
-  padding: 5px 10px;
-  background-color: #4a90e2;
+  padding: 10px 20px;
+  background-color: #4a90e2; /* Sesuai dengan warna tombol di file lain */
   border: none;
-  border-radius: 5px;
-  color: white;
+  border-radius: 8px;
+  color: #ffffff;
   cursor: pointer;
-  margin-top: 5px;
+  font-size: 1rem;
+  font-weight: 500;
+  font-family: 'Roboto', sans-serif; /* Konsistensi font */
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.like-button::before {
+  content: '❤️';
+  font-size: 1rem;
 }
 
 .like-button:hover {
-  background-color: #357abd;
+  background-color: #357abd; /* Sesuai dengan warna hover di file lain */
+  transform: translateY(-3px);
 }
 
+.like-button:focus {
+  outline: 2px solid #4a90e2; /* Sesuai dengan warna fokus di file lain */
+  outline-offset: 2px;
+}
+
+.like-button:active {
+  transform: translateY(0);
+}
+
+/* Error */
 .error {
-  color: red;
-  font-size: 14px;
+  color: #ff4d4f;
+  font-size: 0.875rem;
+  margin-top: 12px;
+  padding: 8px;
+  background-color: rgba(255, 77, 79, 0.1);
+  border-radius: 4px;
+  text-align: center;
+  font-family: 'Roboto', sans-serif; /* Konsistensi font */
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .chat-list {
+    padding: 16px;
+  }
+
+  .header h1 {
+    font-size: calc(1rem + 2vw);
+    font-family: 'Roboto', sans-serif; /* Konsistensi font */
+  }
+
+  .menu-icon {
+    font-size: 1.25rem;
+  }
+
+  .posts-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+  }
+
+  .post-card {
+    max-width: 350px;
+  }
+
+  .post-image {
+    height: 220px;
+  }
+
+  .post-overlay h3 {
+    font-size: 1.2rem;
+    font-family: 'Roboto', sans-serif; /* Konsistensi font */
+  }
+
+  .post-overlay .like-count {
+    font-size: 0.875rem;
+    padding: 4px 8px;
+    font-family: 'Roboto', sans-serif; /* Konsistensi font */
+  }
+
+  .like-button {
+    padding: 8px 16px;
+    font-size: 0.875rem;
+    font-family: 'Roboto', sans-serif; /* Konsistensi font */
+  }
+}
+
+@media (max-width: 480px) {
+  .chat-list {
+    padding: 12px;
+  }
+
+  .search-bar {
+    font-size: 0.875rem;
+    padding: 10px;
+    font-family: 'Roboto', sans-serif; /* Konsistensi font */
+  }
+
+  .posts-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+    max-height: 65vh;
+  }
+
+  .post-card {
+    max-width: 250px;
+  }
+
+  .post-image {
+    height: 160px;
+  }
+
+  .post-overlay h3 {
+    font-size: 1rem;
+    font-family: 'Roboto', sans-serif; /* Konsistensi font */
+  }
+
+  .post-overlay .like-count {
+    font-size: 0.75rem;
+    padding: 3px 6px;
+    font-family: 'Roboto', sans-serif; /* Konsistensi font */
+  }
+
+  .like-button {
+    padding: 6px 12px;
+    font-size: 0.75rem;
+    font-family: 'Roboto', sans-serif; /* Konsistensi font */
+  }
 }

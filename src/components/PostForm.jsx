@@ -13,7 +13,7 @@ const PostForm = ({ addPost }) => {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImage(reader.result.split(",")[1]); // Get Base64 string without the prefix
+        setImage(reader.result.split(",")[1]);
       };
       reader.readAsDataURL(file);
     }
@@ -32,7 +32,7 @@ const PostForm = ({ addPost }) => {
       const response = await fetch("http://localhost:8080/posts", {
         method: "POST",
         headers: {
-          "Authorization": `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/x-www-form-urlencoded",
         },
         body: new URLSearchParams({
@@ -48,7 +48,7 @@ const PostForm = ({ addPost }) => {
       }
 
       const newPost = await response.json();
-      addPost(newPost); // Update parent state with new post
+      addPost(newPost);
       setTitle("");
       setDescription("");
       setImage(null);
@@ -60,34 +60,44 @@ const PostForm = ({ addPost }) => {
   };
 
   return (
-    <div className="post-form">
-      <form onSubmit={createPost}>
-        <input
-          type="text"
-          placeholder="Title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-        <textarea
-          placeholder="Description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleImageChange}
-        />
-        {image && (
-          <img
-            src={`data:image/png;base64,${image}`}
-            alt="Preview"
-            className="image-preview"
+    <div className="post-form-wrapper">
+      <div className="post-form">
+        <form onSubmit={createPost} className="form-container">
+          <input
+            type="text"
+            placeholder="Title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="form-input"
           />
-        )}
-        <button type="submit">Post</button>
-        {error && <p className="error">{error}</p>}
-      </form>
+          <textarea
+            placeholder="Description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            className="form-textarea"
+          />
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange}
+            className="form-file"
+          />
+          {image && (
+            <img
+              src={`data:image/png;base64,${image}`}
+              alt="Preview"
+              className="image-preview"
+            />
+          )}
+          <button type="submit" className="form-button">
+            Post
+          </button>
+          {error && <p className="form-error">{error}</p>}
+        </form>
+      </div>
+      <div className="image-side">
+        <img src="/baru.png" alt="Side visual" className="side-image" />
+      </div>
     </div>
   );
 };

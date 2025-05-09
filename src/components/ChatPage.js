@@ -19,7 +19,6 @@ const ChatPage = () => {
   const [post, setPost] = useState(null);
   const [error, setError] = useState(null);
 
-  // Memoize messagesRef to prevent re-creation on every render
   const messagesRef = useMemo(() => collection(db, `posts/${postId}/comments`), [postId]);
 
   useEffect(() => {
@@ -28,11 +27,9 @@ const ChatPage = () => {
       return;
     }
 
-    // Create an AbortController to cancel fetch requests
     const abortController = new AbortController();
     const signal = abortController.signal;
 
-    // Fetch post data
     const fetchPost = async () => {
       try {
         const response = await fetch(`http://localhost:8080/posts/${postId}`, { signal });
@@ -45,36 +42,26 @@ const ChatPage = () => {
           throw new Error(`Failed to fetch post: ${response.statusText}`);
         }
         const data = await response.json();
-        console.log("Initial post data:", data); // Debug initial data
         setPost(data);
         setError(null);
       } catch (err) {
-        if (err.name === 'AbortError') {
-          console.log("Fetch aborted for post:", postId);
-          return;
+        if (err.name !== 'AbortError') {
+          setError(`Failed to fetch post: ${err.message}`);
+          navigate("/");
         }
-        setError(`Failed to fetch post: ${err.message}`);
-        navigate("/");
-        console.error("Fetch error:", err);
       }
     };
 
     fetchPost();
 
-    // Set up real-time chat listener
-    const queryMessages = query(messagesRef, orderBy("createdAt"));
-    const unsubscribe = onSnapshot(queryMessages, (snapshot) => {
-      let messages = [];
-      snapshot.forEach((doc) => {
-        messages.push({ ...doc.data(), id: doc.id });
-      });
-      setMessages(messages);
-    }, (error) => {
-      console.error("Error fetching comments:", error);
-      setError(`Failed to load comments: ${error.message}`);
+    const unsubscribe = onSnapshot(query(messagesRef, orderBy("createdAt")), (snapshot) => {
+      const updatedMessages = snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+      setMessages(updatedMessages);
+    }, (err) => {
+      console.error("Error fetching comments:", err);
+      setError(`Failed to load comments: ${err.message}`);
     });
 
-    // Cleanup: Abort fetch and unsubscribe from Firestore listener
     return () => {
       abortController.abort();
       unsubscribe();
@@ -83,8 +70,7 @@ const ChatPage = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    if (newMessage === "" || !postId || !auth.currentUser) return;
+    if (!newMessage || !auth.currentUser) return;
 
     try {
       await addDoc(messagesRef, {
@@ -96,7 +82,6 @@ const ChatPage = () => {
       });
       setNewMessage("");
     } catch (error) {
-      console.error("Error adding comment:", error);
       setError(`Failed to add comment: ${error.message}`);
     }
   };
@@ -105,10 +90,9 @@ const ChatPage = () => {
     if (!postId || !auth.currentUser) return;
 
     const maxRetries = 3;
-    for (let attempt = 0; attempt < maxRetries; attempt++) {
+    for (let i = 0; i < maxRetries; i++) {
       try {
         const token = await auth.currentUser.getIdToken();
-        console.log("Sending token:", token); // Debug log
         const response = await fetch(`http://localhost:8080/posts/${postId}/like`, {
           method: "POST",
           headers: {
@@ -116,36 +100,26 @@ const ChatPage = () => {
             "Content-Type": "application/json",
           },
         });
-        if (!response.ok) {
-          throw new Error(`Failed to like post: ${response.statusText}`);
-        }
+        if (!response.ok) throw new Error(`Failed to like post: ${response.statusText}`);
         const updatedPost = await response.json();
-        console.log("Updated post data:", updatedPost); // Debug updated data
-        setPost(updatedPost); // Update state with the updated post
+        setPost(updatedPost);
         return;
       } catch (err) {
-        if (attempt === maxRetries - 1) {
-          console.error("Like error after retries:", err);
+        if (i === maxRetries - 1) {
           setError(`Failed to like post after ${maxRetries} attempts: ${err.message}`);
         } else {
-          console.warn(`Like attempt ${attempt + 1} failed, retrying...`, err);
-          await new Promise(resolve => setTimeout(resolve, 1000));
+          await new Promise((res) => setTimeout(res, 1000));
         }
       }
     }
   };
 
-  if (!post && !error) {
-    return <div>Loading...</div>;
-  }
+  if (!post && !error) return <div>Loading...</div>;
 
   return (
     <div className="chat-app">
       <div className="header">
-        <button onClick={() => navigate(-1)} className="back-button">
-          ← Back
-        </button>
-        <h1>Live Chat for Post {postId}</h1>
+        <button onClick={() => navigate(-1)} className="back-button">← Back</button>
       </div>
       {error && <p className="error">{error}</p>}
       {post && (
@@ -155,11 +129,10 @@ const ChatPage = () => {
             src={`data:image/png;base64,${post.image_data}`}
             alt={post.description}
             className="post-image"
-            onError={(e) => console.error("Error loading image:", post.image_data)}
           />
           <p className="post-description">{post.description}</p>
           <button onClick={handleLike} className="like-button">
-            Like ({post ? post.like_count : 0})
+            Like ({post.like_count || 0})
           </button>
         </div>
       )}
@@ -174,13 +147,11 @@ const ChatPage = () => {
         <input
           type="text"
           value={newMessage}
-          onChange={(event) => setNewMessage(event.target.value)}
+          onChange={(e) => setNewMessage(e.target.value)}
           className="new-message-input"
           placeholder="Type your comment here..."
         />
-        <button type="submit" className="send-button">
-          Send
-        </button>
+        <button type="submit" className="send-button">Send</button>
       </form>
     </div>
   );

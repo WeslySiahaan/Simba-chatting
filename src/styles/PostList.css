@@ -1,0 +1,63 @@
+/* Post List */
+.post-list {
+  background-color: #ffffff; /* Background putih */
+  padding: 32px; /* Menambahkan padding lebih banyak untuk membuat kontainer lebih besar */
+  border-radius: 12px;
+  color: #333333; /* Warna teks lebih gelap agar kontras dengan latar belakang putih */
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; /* Modern font stack */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Bayangan lebih besar untuk memberi kedalaman */
+  max-width: 1200px; /* Membatasi lebar maksimum untuk menjaga tata letak tetap rapi */
+  margin: 0 auto; /* Membuat list terpusat secara horizontal */
+}
+
+/* Post List Item */
+.post-list-item {
+  margin-bottom: 48px; /* Meningkatkan margin bawah antar item untuk memberikan ruang lebih */
+  padding-bottom: 32px; /* Menambahkan padding bawah agar item lebih besar */
+  border-bottom: 1px solid #e0e0e0; /* Border terang untuk pemisah antar item */
+  line-height: 1.75; /* Meningkatkan line-height untuk teks lebih mudah dibaca */
+}
+
+/* Post List Error */
+.post-list-error {
+  color: #ff4c4c;
+  background-color: #ffe6e6; /* Latar belakang error lebih lembut */
+  padding: 16px; /* Meningkatkan padding agar error lebih menonjol */
+  border-radius: 8px;
+  margin-bottom: 24px; /* Meningkatkan margin bawah agar lebih jauh dari elemen lainnya */
+  font-size: 1rem; /* Ukuran font lebih besar untuk visibilitas */
+  font-weight: 600; /* Menambahkan ketebalan font untuk penekanan */
+  border: 1px solid #ff4c4c; /* Border untuk pemisah */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Bayangan lembut untuk visibilitas lebih baik */
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .post-list {
+    padding: 24px; /* Padding sedikit lebih kecil pada layar medium */
+  }
+
+  .post-list-item {
+    margin-bottom: 36px; /* Mengurangi margin pada layar lebih kecil */
+  }
+
+  .post-list-error {
+    font-size: 0.875rem; /* Ukuran font lebih kecil untuk perangkat kecil */
+    padding: 12px; /* Padding lebih kecil untuk perangkat kecil */
+  }
+}
+
+@media (max-width: 480px) {
+  .post-list {
+    padding: 16px; /* Padding lebih kecil pada layar kecil */
+  }
+
+  .post-list-item {
+    margin-bottom: 24px; /* Margin lebih kecil untuk layar kecil */
+  }
+
+  .post-list-error {
+    font-size: 0.75rem;
+    padding: 8px; /* Padding lebih kecil pada error message */
+  }
+}

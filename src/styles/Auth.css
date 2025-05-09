@@ -1,14 +1,67 @@
 .auth {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh; /* Full viewport height for better centering */
+  padding: 20px;
   text-align: center;
+  font-family: 'Roboto', sans-serif; /* Menyeragamkan dengan PostForm.css */
+  background: linear-gradient(to bottom, #4a90e2, #ffffff); /* Gradiasi biru ke putih */
+}
+
+.auth p {
+  margin-bottom: 20px;
+  font-size: 1.2rem;
+  color: #333; /* Softer text color */
+  font-family: 'Roboto', sans-serif; /* Konsistensi font */
 }
 
 .auth button {
-  width: 200px;
+  width: 100%;
+  max-width: 250px; /* Slightly larger max-width for flexibility */
   height: 50px;
+  padding: 0 20px; /* Better internal spacing */
   border: none;
-  background-color: #3b5998;
+  background-color: #4a90e2; /* Menggunakan warna biru dari PostForm.css untuk konsistensi */
   color: white;
-  border-radius: 8px;
-  font-size: 18px;
+  border-radius: 8px; /* Sesuai dengan border-radius di PostForm.css */
+  font-size: 1.1rem; /* Slightly larger for readability */
+  font-weight: 500; /* Medium weight for emphasis */
+  font-family: 'Roboto', sans-serif; /* Konsistensi font */
   cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transitions */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+/* Hover and focus states for accessibility */
+.auth button:hover {
+  background-color: #357abd; /* Menggunakan warna hover dari PostForm.css */
+  transform: translateY(-2px); /* Slight lift effect */
+}
+
+.auth button:focus {
+  outline: 2px solid #4a90e2; /* Menggunakan warna outline dari PostForm.css */
+  outline-offset: 2px;
+}
+
+/* Active state for click feedback */
+.auth button:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .auth p {
+    font-size: 1rem;
+    font-family: 'Roboto', sans-serif; /* Konsistensi font */
+  }
+
+  .auth button {
+    max-width: 200px;
+    font-size: 1rem;
+    height: 45px;
+    font-family: 'Roboto', sans-serif; /* Konsistensi font */
+  }
 }

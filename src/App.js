@@ -45,15 +45,51 @@ function App() {
 
   return (
     <Router>
-      <div className="App">
-        <button onClick={signOutUser}>Sign Out</button>
-        <p>User Token: {cookies.get('auth-token')}</p>
-        <PostForm addPost={addPost} />
-        <Routes>
-          <Route path="/" element={<ChatList posts={posts} setPosts={setPosts} />} />
-          <Route path="/chat/:postId" element={<ChatPage />} />
-          <Route path="*" element={<Navigate to="/" />} />
-        </Routes>
+      <div
+        className="App"
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          minHeight: '100vh',
+        }}
+      >
+        <header
+          style={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+            alignItems: 'center',
+            padding: '1rem',
+            backgroundColor: '#f3f4f6',
+            width: '100%',
+          }}
+        >
+          <button
+            onClick={signOutUser}
+            style={{
+              backgroundColor: '#ef4444',
+              color: 'white',
+              fontWeight: 'bold',
+              padding: '0.75rem 1.5rem',
+              fontSize: '1.1rem',
+              borderRadius: '0.25rem',
+              border: 'none',
+              cursor: 'pointer',
+            }}
+            onMouseOver={(e) => (e.target.style.backgroundColor = '#dc2626')}
+            onMouseOut={(e) => (e.target.style.backgroundColor = '#ef4444')}
+          >
+            Sign Out
+          </button>
+        </header>
+        <main
+        >
+          <PostForm addPost={addPost} />
+          <Routes>
+            <Route path="/" element={<ChatList posts={posts} setPosts={setPosts} />} />
+            <Route path="/chat/:postId" element={<ChatPage />} />
+            <Route path="*" element={<Navigate to="/" />} />
+          </Routes>
+        </main>
       </div>
     </Router>
   );

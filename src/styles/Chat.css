@@ -1,124 +1,267 @@
+/* Chat app container */
 .chat-app {
-  padding: 20px;
-  background-color: #000000;
-  color: white;
-  height: 100vh;
-  overflow-y: auto;
+  background: linear-gradient(to bottom, #4a90e2, #ffffff); /* Gradiasi biru ke putih */
+  padding: 24px;
+  min-height: 100vh; /* Full viewport height */
+  font-family: 'Roboto', sans-serif; /* Konsistensi font */
 }
 
+/* Header styling */
 .header {
-  margin-bottom: 20px;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
+  margin-bottom: 24px;
+  flex-wrap: wrap; /* Wraps for smaller screens */
 }
 
 .header h1 {
-  font-size: 24px;
+  font-size: 1.5rem; /* Scalable heading */
+  font-weight: 600;
   margin: 0;
+  color: #000000;
+  font-family: 'Roboto', sans-serif; /* Konsistensi font */
 }
 
+/* Back button */
 .back-button {
-  padding: 5px 10px;
+  padding: 8px 16px;
   background-color: #4a90e2;
   border: none;
-  border-radius: 5px;
-  color: white;
+  border-radius: 6px;
+  color: #ffffff;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 1rem;
+  font-weight: 500;
+  font-family: 'Roboto', sans-serif; /* Konsistensi font */
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .back-button:hover {
   background-color: #357abd;
+  transform: translateY(-2px);
 }
 
+.back-button:focus {
+  outline: 2px solid #4a90e2;
+  outline-offset: 2px;
+}
+
+.back-button:active {
+  transform: translateY(0);
+}
+
+/* Post preview styling */
 .post-preview {
-  margin-bottom: 20px;
+  margin-bottom: 24px;
+  padding: 16px;
+  background-color: #ffffff; /* White background */
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .post-title {
-  font-size: 20px;
-  margin-bottom: 10px;
-  color: white;
+  font-size: 1.25rem; /* 20px font size for better readability */
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #000000;
+  font-family: 'Roboto', sans-serif; /* Konsistensi font */
 }
 
 .post-image {
   width: 100%;
-  max-width: 400px;
+  max-width: 500px;
   height: auto;
-  border-radius: 5px;
-  margin-bottom: 10px;
+  border-radius: 6px;
+  margin-bottom: 12px;
+  object-fit: cover; /* Ensure images maintain aspect ratio */
 }
 
 .post-description {
-  font-size: 16px;
-  color: #aaaaaa;
-  margin: 0 0 10px 0;
+  font-size: 1rem;
+  color: #333333;
+  margin-bottom: 12px;
+  line-height: 1.5; /* Improved line spacing for readability */
+  font-family: 'Roboto', sans-serif; /* Konsistensi font */
 }
 
+/* Like button */
 .like-button {
-  padding: 5px 10px;
+  padding: 8px 16px;
   background-color: #4a90e2;
   border: none;
-  border-radius: 5px;
-  color: white;
+  border-radius: 6px;
+  color: #ffffff;
   cursor: pointer;
-  margin-top: 5px;
+  font-size: 1rem;
+  font-weight: 500;
+  font-family: 'Roboto', sans-serif; /* Konsistensi font */
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .like-button:hover {
   background-color: #357abd;
+  transform: translateY(-2px);
 }
 
+.like-button:focus {
+  outline: 2px solid #4a90e2;
+  outline-offset: 2px;
+}
+
+.like-button:active {
+  transform: translateY(0);
+}
+
+/* Messages section */
 .messages {
-  margin-bottom: 20px;
+  margin-bottom: 24px;
   max-height: 50vh;
   overflow-y: auto;
+  padding: 10px;
+  background-color: #ffffff; /* White background */
+  border-radius: 8px;
 }
 
 .message {
-  padding: 10px;
-  border-bottom: 1px solid #333333;
+  padding: 12px;
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
 }
 
 .user {
-  font-weight: bold;
-  margin-right: 5px;
+  font-weight: 600;
+  color: #4a90e2;
+  margin-right: 8px;
+  font-family: 'Roboto', sans-serif; /* Konsistensi font */
 }
 
+/* New message input */
 .new-message-form {
   display: flex;
-  gap: 10px;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 0;
 }
 
 .new-message-input {
   flex: 1;
-  padding: 10px;
-  background-color: #333333;
-  border: none;
-  border-radius: 5px;
-  color: white;
-  font-size: 16px;
+  background-color: #f5f5f5; /* Light gray for contrast */
+  border: 1px solid #cccccc;
+  border-radius: 6px;
+  color: #000000;
+  font-size: 1rem;
+  font-family: 'Roboto', sans-serif; /* Konsistensi font */
+  transition: border-color 0.3s ease;
 }
 
 .new-message-input::placeholder {
-  color: #aaaaaa;
+  color: #666666;
+}
+
+.new-message-input:focus {
+  border-color: #4a90e2;
+  outline: none;
 }
 
 .send-button {
-  padding: 10px 20px;
+  padding: 12px 24px;
   background-color: #4a90e2;
   border: none;
-  border-radius: 5px;
-  color: white;
+  border-radius: 6px;
+  color: #ffffff;
   cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  font-family: 'Roboto', sans-serif; /* Konsistensi font */
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .send-button:hover {
   background-color: #357abd;
+  transform: translateY(-2px);
 }
 
+.send-button:focus {
+  outline: 2px solid #4a90e2;
+  outline-offset: 2px;
+}
+
+.send-button:active {
+  transform: translateY(0);
+}
+
+/* Error message */
 .error {
-  color: red;
-  font-size: 14px;
+  color: #ff4d4f;
+  font-size: 0.875rem;
+  margin-top: 10px;
+  padding: 8px;
+  background-color: rgba(255, 77, 79, 0.1);
+  border-radius: 4px;
+  font-family: 'Roboto', sans-serif; /* Konsistensi font */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .chat-app {
+    padding: 16px;
+  }
+
+  .header h1 {
+    font-size: 1.25rem;
+    font-family: 'Roboto', sans-serif; /* Konsistensi font */
+  }
+
+  .post-title {
+    font-size: 1.125rem;
+    font-family: 'Roboto', sans-serif; /* Konsistensi font */
+  }
+
+  .post-image {
+    max-width: 100%;
+  }
+
+  .new-message-form {
+    flex-direction: column;
+  }
+
+  .new-message-input,
+  .send-button {
+    width: 100%;
+  }
+
+  .send-button {
+    padding: 12px;
+    font-family: 'Roboto', sans-serif; /* Konsistensi font */
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    gap: 8px;
+  }
+
+  .back-button,
+  .like-button,
+  .send-button {
+    font-size: 0.875rem;
+    padding: 8px 12px;
+    font-family: 'Roboto', sans-serif; /* Konsistensi font */
+  }
+
+  .post-description,
+  .new-message-input {
+    font-size: 0.875rem;
+    font-family: 'Roboto', sans-serif; /* Konsistensi font */
+  }
+
+  .messages {
+    max-height: 40vh;
+  }
 }
