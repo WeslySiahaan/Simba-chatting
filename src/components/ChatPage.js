@@ -114,7 +114,6 @@ const ChatPage = () => {
     }
   };
 
-  if (!post && !error) return <div>Loading...</div>;
 
   return (
     <div className="chat-app">

@@ -78,7 +78,17 @@ export const ChatList = ({ posts, setPosts }) => {
   return (
     <div className="chat-list">
       <div className="header">
-      <h1 style={{ color: "black" }}>Posts</h1>
+        <h1
+          style={{
+            color: "black",
+            border: "2px solid #1a202c", // Menambahkan border
+            padding: "0.5rem 1rem", // Padding untuk ruang di dalam border
+            borderRadius: "8px", // Sudut membulat untuk estetika
+            display: "inline-block", // Membuat border mengikuti lebar teks
+          }}
+        >
+          Posts
+        </h1>
         <div className="menu-icon">⋮</div>
       </div>
       <input
@@ -89,7 +99,6 @@ export const ChatList = ({ posts, setPosts }) => {
         className="search-bar"
       />
       <div className="posts-grid">
-        {loading && <p className="loading">Loading posts...</p>}
         {error && <p className="error">{error}</p>}
         {!loading && filteredPosts.length === 0 && !error && <p>No posts found.</p>}
         {filteredPosts.map((post) => (
